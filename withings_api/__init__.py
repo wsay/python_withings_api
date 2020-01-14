@@ -67,6 +67,7 @@ class AbstractWithingsApi:
     PATH_MEASURE = "measure"
     PATH_V2_SLEEP = "v2/sleep"
     PATH_NOTIFY = "notify"
+    PATH_V2_HEART = "v2/heart"
 
     @abstractmethod
     def _request(
@@ -157,6 +158,27 @@ class AbstractWithingsApi:
 
         return new_measure_get_meas_response(
             self.request(path=self.PATH_MEASURE, params=params)
+        )
+
+    def heart_list(
+        self,
+        startdate: Optional[DateType] = None,
+        enddate: Optional[DateType] = None,
+        offset: Optional[int] = None,
+    ) -> str:
+        """Get a list of ECG and blood pressure recordings."""
+        params = {}  # type: Dict[str, Any]
+
+        update_params(
+            params, "startdate", startdate, lambda val: arrow.get(val).timestamp
+        )
+        update_params(params, "enddate", enddate, lambda val: arrow.get(val).timestamp)
+        update_params(params, "offset", offset)
+        update_params(params, "action", "list")
+
+        # TODO: Custom return object like others
+        return str(
+            self.request(path=self.PATH_V2_HEART, params=params)
         )
 
     def sleep_get(
