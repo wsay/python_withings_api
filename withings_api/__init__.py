@@ -181,6 +181,21 @@ class AbstractWithingsApi:
             self.request(path=self.PATH_V2_HEART, params=params)
         )
 
+    def heart_get(
+        self,
+        signalid: int,
+    ) -> str:
+        """Get a list of ECG and blood pressure recordings."""
+        params = {}  # type: Dict[str, Any]
+
+        update_params(params, "signalid", signalid)
+        update_params(params, "action", "get")
+
+        # TODO: Custom return object like others
+        return str(
+            self.request(path=self.PATH_V2_HEART, params=params)
+        )
+
     def sleep_get(
         self,
         startdate: Optional[DateType] = None,
